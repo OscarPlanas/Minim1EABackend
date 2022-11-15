@@ -1,5 +1,6 @@
 import User from '../model/User';
 import Serie from '../model/Series';
+import ExamConfiguration from '../model/ExamConfiguration';
 import jwt from 'jsonwebtoken';
 import CryptoJS from 'crypto-js';
 import { Request, Response } from 'express';
@@ -59,12 +60,12 @@ const profile = async (req: Request, res: Response) => {
 };
 
 const getall = async (req: Request, res: Response) => {
-	const users = await User.find();
+	const users = await User.find().populate('serie').populate('config');
 	res.status(200).json(users);
 };
 
 const getone = async (req: Request, res: Response) => {
-	const user = await User.findById(req.params.id);
+	const user = await (await User.findById(req.params.id)).populated('serie');
 	res.json(user);
 };
 
@@ -113,6 +114,25 @@ const addSerie = async (req: Request, res: Response) => {
 
 }
 
+const addConfigToUser = async (req: Request, res: Response) => {
+	const { idConfig, idUser } = req.body;
+
+	try {
+		
+		const user = await User.findById(idUser);
+		const config= await ExamConfiguration.findById(idConfig);
+		if (!user || !config) {
+			return res.status(404).send('No user or config found.');
+		}
+		await User.findOneAndUpdate({ _id: user.id }, { $addToSet: { config: config } });
+		res.status(200).json({ status: 'Config added' });
+
+	}catch (error) {
+		res.status(500).json({message: 'error unknown', error });
+	}
+
+}
+
 export default {
 	register,
 	login,
@@ -121,5 +141,6 @@ export default {
 	getone,
 	deleteUser,
 	update,
-	addSerie
+	addSerie,
+	addConfigToUser
 };

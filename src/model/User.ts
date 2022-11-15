@@ -9,7 +9,12 @@ const User = new Schema({
 	serie: [{
 		type: Schema.Types.ObjectId,
 		ref: 'Series'
+	}],
+	config: [{
+		type: Schema.Types.ObjectId,
+		ref: 'ExamConfiguration'
 	}]
+
 });
 
 export default model('User', User);

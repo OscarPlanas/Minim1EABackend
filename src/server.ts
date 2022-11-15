@@ -6,6 +6,7 @@ import User from "./api/User";
 import Booking from "./api/Booking";
 import Series from "./api/Series";
 import Event from "./api/Event";
+import ExamConfiguration from "./api/ExamConfiguration";
 
 
 const app = express();
@@ -19,6 +20,8 @@ app.use('/api/users', User)
 app.use('/api/bookings', Booking)
 app.use('/api/series', Series)
 app.use('/api/events', Event)
+app.use('/api/examconfigurations', ExamConfiguration)
+
 
 app.get('/', ( req: express.Request, res: express.Response ) => {
 	res.send('Hello World!')

@@ -11,5 +11,6 @@ router.get('/', userController.getall);
 router.delete('/:id', userController.deleteUser);
 router.put('/', userController.update);
 router.put('/addserie', userController.addSerie);
+router.put('/addconfig', userController.addConfigToUser);
 
 export default router;
